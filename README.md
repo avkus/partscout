@@ -1,6 +1,3 @@
-# README.md
-
-```markdown
 # 🔍 PartScout
 
 > AI-powered автоматизация подбора автозапчастей для автосервисов
