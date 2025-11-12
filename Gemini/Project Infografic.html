@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инфографика: Проект Агрегатора Запчастей</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; 
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-bg': '#F0F9FF', 
+                        'brand-text': '#073763', 
+                        'brand-primary': '#2274A5', 
+                        'brand-secondary': '#1AB79A', 
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brand-bg font-sans text-brand-text">
+
+    <main class="container mx-auto p-4 md:p-8 max-w-6xl">
+        
+        <header class="text-center mb-12">
+            <h1 class="text-3xl md:text-5xl font-bold text-brand-primary mb-4">Проектный План: Агрегатор Автозапчастей</h1>
+            <p class="text-lg md:text-xl text-brand-text/90">Визуализация технической концепции и дорожной карты</p>
+        </header>
+
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-text mb-6 text-center">От Проблемы к Решению</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-red-500">
+                    <h3 class="text-xl font-semibold text-red-700 mb-3">ДО: Ручной Мониторинг</h3>
+                    <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700">
+                        <li>Трудоемкий ручной подбор запчастей</li>
+                        <li>Постоянный мониторинг 10-20+ сайтов</li>
+                        <li>Риск упустить лучшие предложения</li>
+                        <li>Медленный ответ клиенту</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-green-500">
+                    <h3 class="text-xl font-semibold text-green-700 mb-3">ПОСЛЕ: Автоматизированная Система</h3>
+                    <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700">
+                        <li>Гибридный парсинг: по требованию и фоновый</li>
+                        <li>Мгновенные рекомендации от AI</li>
+                        <li>Локальная B2B-сеть для сверхсрочных заказов</li>
+                        <li>Быстрое и точное предложение для клиента</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-text mb-6 text-center">Двухкомпонентная Архитектура Решения</h2>
+            <p class="text-center text-brand-text/80 mb-8 max-w-3xl mx-auto">Система состоит из двух независимых, но взаимосвязанных модулей: автоматического парсинга
+                крупных поставщиков и локальной B2B-сети для мгновенных запросов.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold text-brand-primary mb-4 text-center">Часть 1: Автоматический Поиск у Поставщиков</h3>
+                    <div class="flex flex-col space-y-4">
+                        <div class="p-4 bg-blue-50 rounded-lg shadow-sm border border-blue-200 text-center">
+                            <span class="font-medium">Менеджер (Telegram-бот)</span><br>
+                            <small class="text-gray-600">Запрос: /find [VIN] [Деталь]</small>
+                        </div>
+                        <div class="text-center text-brand-primary font-bold text-2xl">↓</div>
+                        <div class="p-4 bg-blue-50 rounded-lg shadow-sm border border-blue-200 text-center">
+                            <span class="font-medium">Оркестратор (n8n)</span><br>
+                            <small class="text-gray-600">1. Запрос в каталог (exist.ru) для артикула</small><br>
+                            <small class="text-gray-600">2. Запуск Browser Agents</small>
+                        </div>
+                        <div class="text-center text-brand-primary font-bold text-2xl">↓</div>
+                        <div class="p-4 bg-blue-50 rounded-lg shadow-sm border border-blue-200 text-center">
+                            <span class="font-medium">Browser MCP / Browser Use</span><br>
+                            <small class="text-gray-600">Парсинг 10-20+ сайтов поставщиков</small>
+                        </div>
+                        <div class="text-center text-brand-primary font-bold text-2xl">↓</div>
+                        <div class="p-4 bg-blue-50 rounded-lg shadow-sm border border-blue-200 text-center">
+                            <span class="font-medium">Агрегация данных в JSON</span>
+                        </div>
+                        <div class="text-center text-brand-primary font-bold text-2xl">↓</div>
+                        <div class="p-4 bg-blue-50 rounded-lg shadow-sm border border-blue-200 text-center">
+                            <span class="font-medium">Gemini API (AI-Анализ)</span><br>
+                            <small class="text-gray-600">Генерация сводки (Markdown)</small>
+                        </div>
+                        <div class="text-center text-brand-primary font-bold text-2xl">↓</div>
+                        <div class="p-4 bg-green-50 rounded-lg shadow-sm border border-green-300 text-center">
+                            <span class="font-medium">Результат Менеджеру</span><br>
+                            <small class="text-gray-600">🏆 Рекомендация (Лучший баланс)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold text-brand-secondary mb-4 text-center">Часть 2: Локальная B2B-Сеть (~60 км)</h3>
+                    <div class="flex flex-col space-y-4">
+                        <div class="p-4 bg-teal-50 rounded-lg shadow-sm border border-teal-200 text-center">
+                            <span class="font-medium">Менеджер (через своего бота)</span><br>
+                            <small class="text-gray-600">Кнопка "Опросить B2B-сеть" (если Часть 1 не устроила)</small>
+                        </div>
+                        <div class="text-center text-brand-secondary font-bold text-2xl">↓</div>
+                        <div class="p-4 bg-teal-50 rounded-lg shadow-sm border border-teal-200 text-center">
+                            <span class="font-medium">B2B-Net-Bot (Node.js + Firebase)</span><br>
+                            <small class="text-gray-600">Broadcast-сообщение всем магазинам-партнерам</small>
+                        </div>
+                        <div class="text-center text-brand-secondary font-bold text-2xl">↓</div>
+                        <div class="p-4 bg-teal-50 rounded-lg shadow-sm border border-teal-200 text-center">
+                            <span class="font-medium">Магазины-Партнеры (Telegram)</span><br>
+                            <small class="text-gray-600">Получают запрос и отвечают боту в личном чате</small>
+                        </div>
+                        <div class="text-center text-brand-secondary font-bold text-2xl">↓</div>
+                        <div class="p-4 bg-teal-50 rounded-lg shadow-sm border border-teal-200 text-center">
+                            <span class="font-medium">B2B-Net-Bot (Агрегатор)</span><br>
+                            <small class="text-gray-600">Собирает ответы (Цена, Наличие)</small>
+                        </div>
+                        <div class="text-center text-brand-secondary font-bold text-2xl">↓</div>
+                        <div class="p-4 bg-green-50 rounded-lg shadow-sm border border-green-300 text-center">
+                            <span class="font-medium">Результат Менеджеру</span><br>
+                            <small class="text-gray-600">Ответы от локальных магазинов в реальном времени</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-text mb-6 text-center">Ключевой Технологический Стек</h2>
+            <p class="text-center text-brand-text/80 mb-8 max-w-3xl mx-auto">Для реализации проекта будет использоваться современный и гибкий стек,
+                обеспечивающий оркестрацию, AI-анализ и управление данными в реальном времени.</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <h4 class="text-lg font-semibold text-brand-primary">Оркестрация</h4>
+                    <p class="text-2xl font-bold">n8n</p>
+                    <p class="text-sm text-gray-600">Связывание всех модулей</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <h4 class="text-lg font-semibold text-brand-primary">AI-Анализ</h4>
+                    <p class="text-2xl font-bold">Gemini API</p>
+                    <p class="text-sm text-gray-600">Генерация сводок и рекомендаций</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <h4 class="text-lg font-semibold text-brand-primary">Веб-Автоматизация</h4>
+                    <p class="text-2xl font-bold">Browser MCP</p>
+                    <p class="text-sm text-gray-600">Парсинг "по требованию"</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg shadow-md text-center">
+                    <h4 class="text-lg font-semibold text-brand-primary">Базы Данных</h4>
+                    <p class="text-2xl font-bold">Redis & Firebase</p>
+                    <p class="text-sm text-gray-600">Кеш (Часть 1) и B2B-Бот (Часть 2)</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-text mb-6 text-center">Дорожная Карта Проекта: 4 Фазы</h2>
+            <p class="text-center text-brand-text/80 mb-8 max-w-3xl mx-auto">Итеративный подход, позволяющий быстро запустить MVP и
+                постепенно наращивать функциональность, оптимизируя и масштабируя решение.</p>
+            
+            <div class="relative pl-6 border-l-4 border-brand-primary">
+                
+                <div class="mb-8 p-6 bg-white rounded-lg shadow-lg relative">
+                    <div class="absolute -left-9 top-1/2 -translate-y-1/2 w-6 h-6 bg-brand-primary rounded-full border-4 border-brand-bg"></div>
+                    <h3 class="text-xl font-bold text-brand-primary mb-2">Phase 0: MVP 1 (Ядро Парсинга)</h3>
+                    <p class="text-gray-600">Цель: Дать менеджеру рабочий инструмент для автоматизации "по требованию".</p>
+                    <ul class="list-disc list-outside ml-5 mt-3 text-gray-700">
+                        <li>Интеграция с 1 каталогом (exist.ru)</li>
+                        <li>Настройка Browser Agents для 3-5 ключевых поставщиков</li>
+                        <li>Настройка AI-Анализа (Gemini)</li>
+                        <li>Сборка n8n Workflow и Telegram-бота для менеджера</li>
+                    </ul>
+                </div>
+
+                <div class="mb-8 p-6 bg-white rounded-lg shadow-lg relative">
+                    <div class="absolute -left-9 top-1/2 -translate-y-1/2 w-6 h-6 bg-brand-primary rounded-full border-4 border-brand-bg"></div>
+                    <h3 class="text-xl font-bold text-brand-primary mb-2">Phase 1: MVP 2 (B2B-Сеть)</h3>
+                    <p class="text-gray-600">Цель: Протестировать гипотезу быстрой B2B-доставки (можно параллельно с Фазой 0).</p>
+                    <ul class="list-disc list-outside ml-5 mt-3 text-gray-700">
+                        <li>Создание B2B-Net-Bot (Node.js + Firebase)</li>
+                        <li>Реализация FSM для регистрации магазинов</li>
+                        <li>Настройка механики Broadcast-запросов и ответов</li>
+                    </ul>
+                </div>
+
+                <div class="mb-8 p-6 bg-white rounded-lg shadow-lg relative">
+                    <div class="absolute -left-9 top-1/2 -translate-y-1/2 w-6 h-6 bg-brand-primary rounded-full border-4 border-brand-bg"></div>
+                    <h3 class="text-xl font-bold text-brand-primary mb-2">Phase 2: Интеграция и Оптимизация</h3>
+                    <p class="text-gray-600">Цель: Связать системы и внедрить фоновое кеширование.</p>
+                    <ul class="list-disc list-outside ml-5 mt-3 text-gray-700">
+                        <li>"Умная кнопка" "Опросить B2B-сеть" (если Часть 1 не устроила)</li>
+                        <li>Настройка Redis и ночного парсинга (Топ-1000 артикулов)</li>
+                        <li>Визуализация статусов (Kanban: Trello/ClickUp)</li>
+                    </ul>
+                </div>
+
+                <div class="mb-8 p-6 bg-white rounded-lg shadow-lg relative">
+                    <div class="absolute -left-9 top-1/2 -translate-y-1/2 w-6 h-6 bg-brand-primary rounded-full border-4 border-brand-bg"></div>
+                    <h3 class="text-xl font-bold text-brand-primary mb-2">Phase 3: Масштабирование и Монетизация</h3>
+                    <p class="text-gray-600">Цель: Расширение и начало монетизации B2B-сети.</p>
+                    <ul class="list-disc list-outside ml-5 mt-3 text-gray-700">
+                        <li>Модель монетизации для магазинов (платные broadcast-запросы)</li>
+                        <li>Масштабирование парсинга до 20+ сайтов (с ротацией прокси)</li>
+                        <li>Улучшение AI (учет "надежности поставщика")</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-text mb-6 text-center">Ожидаемые Результаты и KPI</h2>
+            <p class="text-center text-brand-text/80 mb-8 max-w-3xl mx-auto">Внедрение гибридной стратегии позволит
+                радикально сократить время на подбор и оптимизировать логистику.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                
+                <div class="flex flex-col space-y-6">
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <h3 class="text-lg font-semibold text-brand-primary">Парсинг "по Требованию"</h3>
+                        <p class="text-4xl font-bold text-brand-text my-2">1-3 мин</p>
+                        <p class="text-gray-600">Время на полный сбор данных по 10-20+ сайтам</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <h3 class="text-lg font-semibold text-brand-secondary">Локальная B2B-Сеть</h3>
+                        <p class="text-4xl font-bold text-brand-text my-2">&lt; 1 часа</p>
+                        <p class="text-gray-600">Ожидаемое время на получение и самовывоз детали</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-lg font-semibold text-brand-primary text-center mb-2">Стратегия Гибридного Парсинга (Phase 2+)</h3>
+                    <p class="text-sm text-gray-600 text-center mb-4">Ожидается, что до 80% частых запросов (фильтры,
+                        масла) будут обрабатываться мгновенно из фонового кеша.</p>
+                    <div class="chart-container">
+                        <canvas id="parsingStrategyChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center p-6 text-brand-text/70 text-sm">
+        Инфографика на основе "Технического Задания и Roadmap Проекта"
+    </footer>
+
+    <script>
+        function wrapLabel(label) {
+            if (typeof label !== 'string') {
+                return label;
+            }
+            if (label.length <= 16) {
+                return label;
+            }
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            for (const word of words) {
+                const testLine = (currentLine + ' ' + word).trim();
+                if (testLine.length > 16) {
+                    if (currentLine) {
+                        lines.push(currentLine);
+                    }
+                    currentLine = word;
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            if (currentLine) {
+                lines.push(currentLine);
+            }
+            return lines;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('parsingStrategyChart');
+            if (!ctx) return;
+
+            const originalLabels = ['Редкие запчасти (Парсинг по требованию)', 'Частые запчасти (Фоновый кеш Redis)'];
+            const processedLabels = originalLabels.map(wrapLabel);
+            const chartData = [20, 80];
+            const backgroundColors = ['#2274A5', '#1AB79A'];
+            const borderColor = '#F0F9FF';
+
+            new Chart(ctx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: processedLabels,
+                    datasets: [{
+                        label: 'Тип запроса',
+                        data: chartData,
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColor,
+                        borderWidth: 4,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    size: 12
+                                },
+                                color: '#073763',
+                                boxWidth: 20,
+                                padding: 15,
+                                
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                        return label.join(' ');
+                                    } else {
+                                        return label;
+                                    }
+                                },
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
