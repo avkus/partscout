@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инфографика: Детальный План Проекта 'PartScout'</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-bg': '#F0F9FF', 
+                        'brand-text': '#073763', 
+                        'brand-primary': '#2274A5', 
+                        'brand-secondary': '#1AB79A', 
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brand-bg font-sans text-brand-text">
+
+    <main class="container mx-auto p-4 md:p-8 max-w-6xl">
+        
+        <header class="text-center mb-12">
+            <h1 class="text-3xl md:text-5xl font-bold text-brand-primary mb-4">Детализированный План: 'PartScout'</h1>
+            <p class="text-lg md:text-xl text-brand-text/90">Визуализация технической архитектуры и MVP roadmap</p>
+        </header>
+
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-text mb-6 text-center">Выбор AI API для MVP: Gemini</h2>
+            <p class="text-center text-brand-text/80 mb-8 max-w-3xl mx-auto">Для MVP выбран Gemini API благодаря щедрому бесплатному плану,
+                огромному контекстному окну и высокому качеству анализа, что идеально для 10-50 запросов в день.</p>
+            
+            <div class="bg-white p-6 rounded-lg shadow-lg overflow-x-auto">
+                <table class="w-full min-w-max text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-brand-primary/30">
+                            <th class="p-4 text-lg font-semibold text-brand-primary">Параметр</th>
+                            <th class="p-4 text-lg font-semibold text-brand-primary">Gemini Free Tier</th>
+                            <th class="p-4 text-lg font-semibold text-gray-500">GPT-4o</th>
+                            <th class="p-4 text-lg font-semibold text-gray-500">Claude 3.5</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-gray-200">
+                            <td class="p-4 font-medium">Бесплатные запросы</td>
+                            <td class="p-4 font-bold text-brand-secondary">1500 req/день</td>
+                            <td class="p-4 text-gray-600">-</td>
+                            <td class="p-4 text-gray-600">-</td>
+                        </tr>
+                        <tr class="border-b border-gray-200">
+                            <td class="p-4 font-medium">RPM (requests/min)</td>
+                            <td class="p-4 font-bold text-brand-secondary">15</td>
+                            <td class="p-4 text-gray-600">Платно</td>
+                            <td class="p-4 text-gray-600">Платно</td>
+                        </tr>
+                        <tr class="border-b border-gray-200">
+                            <td class="p-4 font-medium">Контекст</td>
+                            <td class="p-4 font-bold text-brand-secondary">2M tokens</td>
+                            <td class="p-4 text-gray-600">128k</td>
+                            <td class="p-4 text-gray-600">200k</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 font-medium">Стоимость (после лимита)</td>
+                            <td class="p-4 font-bold text-brand-secondary">$0.00 / $0.075</td>
+                            <td class="p-4 text-gray-600">$2.50 / $10</td>
+                            <td class="p-4 text-gray-600">$3 / $15</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="mt-4 text-center text-gray-600"><b>Рекомендация:</b> MVP на <b>Gemini 2.0 Flash</b> (бесплатно) с переходом на <b>Gemini 1.5 Pro</b> при масштабировании.</p>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-text mb-6 text-center">Архитектура Браузерной Автоматизации</h2>
+            <p class="text-center text-brand-text/80 mb-8 max-w-3xl mx-auto">Выбран гибридный подход, сочетающий стабильность Playwright,
+                стандартизацию MCP и паттерны AI-управления Browser Use.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                    <h3 class="text-xl font-semibold text-brand-primary mb-2">1. Playwright (Ядро)</h3>
+                    <p class="text-gray-600">✅ Зрелый и стабильный</p>
+                    <p class="text-gray-600">✅ Полный контроль</p>
+                    <p class="text-gray-600">✅ Production-ready</p>
+                </div>
+                <div class="flex justify-center items-center">
+                    <span class="text-brand-primary font-bold text-3xl hidden md:block">→</span>
+                    <span class="text-brand-primary font-bold text-3xl md:hidden">↓</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                    <h3 class="text-xl font-semibold text-brand-primary mb-2">2. MCP (Интеграция)</h3>
+                    <p class="text-gray-600">✅ Стандартизированный протокол</p>
+                    <p class="text-gray-600">✅ Переиспользуемые компоненты</p>
+                    <p class="text-gray-600">✅ Будущее AI-интеграций</p>
+                </div>
+                <div class="flex justify-center items-center md:hidden">
+                    <span class="text-brand-primary font-bold text-3xl">↓</span>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg text-center md:col-start-3">
+                    <h3 class="text-xl font-semibold text-brand-primary mb-2">3. Browser Use (Паттерны)</h3>
+                    <p class="text-gray-600">✅ Готовые абстракции</p>
+                    <p class="text-gray-600">✅ Ускорение AI-логики</p>
+                    <p class="text-gray-600">✅ AI-управление браузером</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-text mb-6 text-center">Инфраструктура MVP</h2>
+            <p class="text-center text-brand-text/80 mb-8 max-w-3xl mx-auto">Связка Docker, Cloudflare Tunnel и Supabase
+                обеспечивает гибкое развертывание, безопасный доступ и надежное хранение данных.</p>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+                    <div class="w-full md:w-1/3 text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <h4 class="font-semibold text-lg text-brand-primary">Интернет / Webhooks</h4>
+                        <span class="text-brand-primary font-bold text-2xl my-2 block">↓</span>
+                        <div class="p-3 bg-orange-100 rounded-lg shadow-sm border border-orange-300">
+                            <h4 class="font-semibold text-lg text-orange-700">Cloudflare Tunnel</h4>
+                            <p class="text-sm text-orange-600">Безопасный доступ (HTTPS)</p>
+                            <p class="text-sm text-orange-600">Нет проблем с IP</p>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full md:w-2/3 p-4 bg-gray-50 rounded-lg border border-gray-300">
+                        <h4 class="font-semibold text-lg text-gray-800 text-center mb-4">Сервер / VPS (Docker Host)</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-3 bg-white rounded shadow-md border border-gray-200">
+                                <b class="text-brand-primary">n8n (container)</b>
+                                <p class="text-sm text-gray-600">Оркестрация workflow</p>
+                            </div>
+                            <div class="p-3 bg-white rounded shadow-md border border-gray-200">
+                                <b class="text-brand-primary">FastAPI (container)</b>
+                                <p class="text-sm text-gray-600">Основное API</p>
+                            </div>
+                            <div class="p-3 bg-white rounded shadow-md border border-gray-200">
+                                <b class="text-brand-primary">Playwright (container)</b>
+                                <p class="text-sm text-gray-600">Браузерная автоматизация</p>
+                            </div>
+                            <div class="p-3 bg-white rounded shadow-md border border-gray-200">
+                                <b class="text-brand-primary">crawl4ai (container)</b>
+                                <p class="text-sm text-gray-600">Простые парсеры</p>
+                            </div>
+                        </div>
+                        <div class="text-center text-green-600 font-bold text-2xl my-2">↓ ↑</div>
+                        <div class="p-3 bg-green-50 rounded-lg shadow-sm border border-green-300 text-center">
+                            <h4 class="font-semibold text-lg text-green-700">Supabase (Внешний)</h4>
+                            <p class="text-sm text-green-600">PostgreSQL (Данные, Логи, B2B)</p>
+                            <p class="text-sm text-green-600">Storage (PDF, Скриншоты)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-text mb-6 text-center">Упрощенная B2B-Архитектура (V1)</h2>
+             <p class="text-center text-brand-text/80 mb-8 max-w-3xl mx-auto">Фокус на функционале: broadcast-запрос
+                подписанным магазинам и агрегация ответов в течение 5 минут.</p>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div class="flex flex-col space-y-4">
+                    <div class="p-4 bg-blue-50 rounded-lg shadow-sm border border-blue-200 text-center">
+                        <span class="font-medium text-lg">МЕНЕДЖЕР (Автосервис)</span><br>
+                        <small class="text-gray-600">Команда: /find Масляный фильтр Toyota</small>
+                    </div>
+                    <div class="text-center text-brand-primary font-bold text-2xl">↓</div>
+                    <div class="p-4 bg-blue-50 rounded-lg shadow-sm border border-blue-200 text-center">
+                        <span class="font-medium text-lg">PartScout Bot (Центральный)</span><br>
+                        <small class="text-gray-600">Делает Broadcast-запрос (ID 12345) всем магазинам</small>
+                    </div>
+                    <div class="text-center text-brand-primary font-bold text-2xl">↓</div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="p-2 bg-teal-50 rounded-lg border border-teal-200 text-center">
+                            <span class="font-medium">Магазин А (60км)</span><br>
+                            <small class="text-gray-600">Ответ: Есть, 650₽</small>
+                        </div>
+                        <div class="p-2 bg-teal-50 rounded-lg border border-teal-200 text-center">
+                            <span class="font-medium">Магазин Б (45км)</span><br>
+                            <small class="text-gray-600">Ответ: Нет в наличии</small>
+                        </div>
+                        <div class="p-2 bg-teal-50 rounded-lg border border-teal-200 text-center">
+                            <span class="font-medium">Магазин В (30км)</span><br>
+                            <small class="text-gray-600">Ответ: Есть, 620₽</small>
+                        </div>
+                        <div class="p-2 bg-red-50 rounded-lg border border-red-200 text-center">
+                            <span class="font-medium">Магазин N (55км)</span><br>
+                            <small class="text-gray-600">Нет ответа (таймаут)</small>
+                        </div>
+                    </div>
+                    <div class="text-center text-brand-primary font-bold text-2xl">↓</div>
+                    <div class="p-4 bg-blue-50 rounded-lg shadow-sm border border-blue-200 text-center">
+                        <span class="font-medium text-lg">Агрегация (5 минут TTL)</span>
+                    </div>
+                    <div class="text-center text-brand-primary font-bold text-2xl">↓</div>
+                    <div class="p-4 bg-green-50 rounded-lg shadow-sm border border-green-300 text-left">
+                        <span class="font-medium text-lg">МЕНЕДЖЕР (Результат):</span><br>
+                        <small class="text-gray-700 block mt-2">📦 Результаты поиска (3/4 магазинов):</small>
+                        <small class="text-gray-700 block mt-1">✅ <b>Магазин В</b> - 620₽ (30км, г.Раменское)</small>
+                        <small class="text-gray-700 block mt-1">✅ <b>Магазин А</b> - 650₽ (60км, г.Жуковский)</small>
+                        <small class="text-gray-700 block mt-1">❌ <b>Магазин Б</b> - нет в наличии</small>
+                        <small class="text-gray-700 block mt-1">⏳ <b>Магазин N</b> - не ответил</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-text mb-6 text-center">Финальный Технологический Стек MVP</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold text-brand-primary mb-3">AI & Agents</h3>
+                    <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700">
+                        <li>Gemini 2.0 Flash (основной)</li>
+                        <li>Gemini 1.5 Pro (резерв)</li>
+                        <li>Google AI Python SDK</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold text-brand-primary mb-3">Browser Automation</h3>
+                    <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700">
+                        <li>Playwright (ядро)</li>
+                        <li>MCP Browser Server</li>
+                        <li>crawl4ai (простые задачи)</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold text-brand-primary mb-3">Backend</h3>
+                    <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700">
+                        <li>FastAPI (основное API)</li>
+                        <li>Python 3.11+</li>
+                        <li>Pydantic v2 (валидация)</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold text-brand-primary mb-3">Orchestration</h3>
+                    <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700">
+                        <li>n8n (визуальные workflow)</li>
+                        <li>MCP Protocol (интеграции)</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold text-brand-primary mb-3">Database & Messaging</h3>
+                    <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700">
+                        <li>Supabase PostgreSQL</li>
+                        <li>Supabase Storage</li>
+                        <li>aiogram 3.x (Telegram)</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold text-brand-primary mb-3">Infrastructure & Dev</h3>
+                    <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700">
+                        <li>Docker + Docker Compose</li>
+                        <li>Cloudflare Tunnel</li>
+                        <li>VS Code + Continue / Cline</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-brand-text mb-6 text-center">Скорректированный Roadmap</h2>
+             <p class="text-center text-brand-text/80 mb-8 max-w-3xl mx-auto">Двухфазный план с фокусом на
+                быстрый запуск основного функционала (Phase 1) и последующее добавление B2B-сети (Phase 2).</p>
+            
+            <div class="relative pl-6 border-l-4 border-brand-primary">
+                
+                <div class="mb-8 p-6 bg-white rounded-lg shadow-lg relative">
+                    <div class="absolute -left-9 top-1/2 -translate-y-1/2 w-6 h-6 bg-brand-primary rounded-full border-4 border-brand-bg"></div>
+                    <h3 class="text-xl font-bold text-brand-primary mb-2">Phase 1: MVP (Фокус на ядро)</h3>
+                    <p class="text-gray-600 font-semibold mb-3">Итого: ~2 месяца</p>
+                    <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700">
+                        <li><b>Milestone 1.1 (1 нед):</b> Настройка инфраструктуры (Docker, Supabase, Cloudflare, n8n)</li>
+                        <li><b>Milestone 1.2 (2 нед):</b> Интеграция с каталогом (exist.ru) для получения артикулов</li>
+                        <li><b>Milestone 1.3 (3 нед):</b> Настройка парсинга (Playwright+MCP) для 3-5 поставщиков</li>
+                        <li><b>Milestone 1.4 (2 нед):</b> Настройка AI-Анализа (Gemini) для генерации рекомендаций</li>
+                        <li><b>Milestone 1.5 (1 нед):</b> Создание Telegram-бота для менеджера (команды, отчеты)</li>
+                    </ul>
+                </div>
+
+                <div class="mb-8 p-6 bg-white rounded-lg shadow-lg relative">
+                    <div class="absolute -left-9 top-1/2 -translate-y-1/2 w-6 h-6 bg-brand-secondary rounded-full border-4 border-brand-bg"></div>
+                    <h3 class="text-xl font-bold text-brand-secondary mb-2">Phase 2: B2B Сеть (Упрощенная)</h3>
+                    <p class="text-gray-600 font-semibold mb-3">Итого: ~3 недели</p>
+                    <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700">
+                        <li><b>Milestone 2.1 (2 нед):</b> Telegram-бот для магазинов (регистрация, broadcast, ответы)</li>
+                        <li><b>Milestone 2.2 (1 нед):</b> Интеграция B2B-ответов в основной поиск менеджера</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center p-6 text-brand-text/70 text-sm">
+        Инфографика на основе "Детализированного Плана Реализации и Технического Стека"
+    </footer>
+
+</body>
+</html>
