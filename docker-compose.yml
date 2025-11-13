@@ -1,0 +1,367 @@
+# ============================================================================
+# PARTSCOUT - Docker Compose Configuration
+# ============================================================================
+# Приблизительная структура для MVP
+# Будет дорабатываться после интервью с менеджером и владельцем
+# ============================================================================
+
+version: '3.9'
+
+# ----------------------------------------------------------------------------
+# NETWORKS
+# ----------------------------------------------------------------------------
+networks:
+  partscout-network:
+    driver: bridge
+    name: partscout-network
+
+# ----------------------------------------------------------------------------
+# VOLUMES
+# ----------------------------------------------------------------------------
+volumes:
+  # Для хранения данных Playwright (кэш браузеров)
+  playwright-cache:
+    name: partscout-playwright-cache
+  
+  # Для генерируемых отчетов (PDF, скриншоты)
+  reports-storage:
+    name: partscout-reports
+  
+  # Для логов
+  logs:
+    name: partscout-logs
+
+# ----------------------------------------------------------------------------
+# SERVICES
+# ----------------------------------------------------------------------------
+services:
+
+  # ==========================================================================
+  # FASTAPI - Основное API приложение
+  # ==========================================================================
+  # Включает:
+  # - REST API endpoints
+  # - MCP серверы (catalog, analysis, assisted-search, manual-mode)
+  # - Интеграция с Supabase
+  # - Интеграция с Gemini через прокси
+  # ==========================================================================
+  
+  api:
+    build:
+      context: .
+      dockerfile: ./services/api/Dockerfile
+      args:
+        PYTHON_VERSION: "3.11"
+    
+    container_name: partscout-api
+    
+    restart: unless-stopped
+    
+    environment:
+      # App Settings
+      - FASTAPI_HOST=${FASTAPI_HOST:-0.0.0.0}
+      - FASTAPI_PORT=${FASTAPI_PORT:-8000}
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - DEBUG=${DEBUG:-false}
+      
+      # Gemini через прокси (критично для РБ/РФ)
+      - GEMINI_PROXY_URL=${GEMINI_PROXY_URL}
+      - GEMINI_PROXY_MASTER_KEY=${GEMINI_PROXY_MASTER_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-2.0-flash-exp}
+      
+      # Database
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      
+      # Telegram
+      - TELEGRAM_MANAGER_BOT_TOKEN=${TELEGRAM_MANAGER_BOT_TOKEN}
+      - TELEGRAM_MANAGER_CHAT_ID=${TELEGRAM_MANAGER_CHAT_ID}
+      
+      # Catalogs (Belarus)
+      - AUTO1_BY_API_URL=${AUTO1_BY_API_URL}
+      - AUTO1_BY_LOGIN=${AUTO1_BY_LOGIN}
+      - AUTO1_BY_PASSWORD=${AUTO1_BY_PASSWORD}
+      - ARMTEK_BY_API_URL=${ARMTEK_BY_API_URL}
+      - ARMTEK_BY_API_KEY=${ARMTEK_BY_API_KEY}
+      
+      # Feature Flags
+      - FEATURE_ASSISTED_SEARCH=${FEATURE_ASSISTED_SEARCH:-true}
+      - FEATURE_MANUAL_MODE=${FEATURE_MANUAL_MODE:-true}
+    
+    ports:
+      - "8000:8000"
+    
+    volumes:
+      # Код (для hot reload в development)
+      - ./services/api:/app
+      - ./shared:/app/shared
+      
+      # Отчеты
+      - reports-storage:/app/reports
+      
+      # Логи
+      - logs:/app/logs
+    
+    networks:
+      - partscout-network
+    
+    # Ожидаем что Supabase уже доступен (внешний сервис)
+    # depends_on:
+    #   - postgres  # Если бы использовали локальную БД
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    labels:
+      - "partscout.service=api"
+      - "partscout.description=Main FastAPI application with MCP servers"
+
+  # ==========================================================================
+  # BROWSER SERVICE - Парсинг сайтов поставщиков
+  # ==========================================================================
+  # Включает:
+  # - Playwright (Chromium)
+  # - MCP Browser Server
+  # - crawl4ai (опционально)
+  # - Изолирован от основного API для безопасности
+  # ==========================================================================
+  
+  browser:
+    build:
+      context: .
+      dockerfile: ./services/scraper/Dockerfile
+      args:
+        # Playwright требует специфичные зависимости
+        BASE_IMAGE: "mcr.microsoft.com/playwright/python:v1.40.0-jammy"
+    
+    container_name: partscout-browser
+    
+    restart: unless-stopped
+    
+    environment:
+      # Playwright Settings
+      - PLAYWRIGHT_HEADLESS=${PLAYWRIGHT_HEADLESS:-true}
+      - PLAYWRIGHT_BROWSER=${PLAYWRIGHT_BROWSER:-chromium}
+      - PLAYWRIGHT_TIMEOUT=${PLAYWRIGHT_TIMEOUT:-30000}
+      
+      # Для стабильности браузера
+      - DISPLAY=:99
+      
+      # Supabase (для кэширования результатов парсинга)
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      
+      # Gemini (для AI-анализа DOM если нужен)
+      - GEMINI_PROXY_URL=${GEMINI_PROXY_URL}
+      - GEMINI_PROXY_MASTER_KEY=${GEMINI_PROXY_MASTER_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    
+    ports:
+      - "8080:8080"
+    
+    volumes:
+      # Код
+      - ./services/scraper:/app
+      - ./shared:/app/shared
+      
+      # Кэш браузеров (чтобы не скачивать каждый раз)
+      - playwright-cache:/ms-playwright
+      
+      # Скриншоты и артефакты парсинга
+      - reports-storage:/app/screenshots
+      
+      # /dev/shm для стабильности Chromium
+      - /dev/shm:/dev/shm
+    
+    networks:
+      - partscout-network
+    
+    # Увеличенная память для браузера
+    mem_limit: 2g
+    
+    security_opt:
+      # Для запуска Chrome без sandbox (только для dev!)
+      - seccomp:unconfined
+    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 60s
+      timeout: 15s
+      retries: 3
+    
+    labels:
+      - "partscout.service=browser"
+      - "partscout.description=Playwright browser automation for supplier parsing"
+
+  # ==========================================================================
+  # RAG SERVICE - Embeddings и векторный поиск (опционально для MVP)
+  # ==========================================================================
+  # Включает:
+  # - Создание embeddings через Gemini
+  # - Поиск в Supabase pgvector
+  # - Обработка документов из Google Drive
+  # Может быть объединен с API, но выделен для масштабируемости
+  # ==========================================================================
+  
+  rag:
+    build:
+      context: .
+      dockerfile: ./services/rag/Dockerfile
+    
+    container_name: partscout-rag
+    
+    restart: unless-stopped
+    
+    environment:
+      # Gemini Embeddings
+      - GEMINI_PROXY_URL=${GEMINI_PROXY_URL}
+      - GEMINI_PROXY_MASTER_KEY=${GEMINI_PROXY_MASTER_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - GEMINI_EMBEDDING_MODEL=${GEMINI_EMBEDDING_MODEL:-text-embedding-004}
+      
+      # Supabase (pgvector)
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      
+      # Google Drive
+      - GOOGLE_DRIVE_CREDENTIALS_PATH=/app/credentials/google-drive-credentials.json
+      - GOOGLE_DRIVE_PRICELISTS_FOLDER_ID=${GOOGLE_DRIVE_PRICELISTS_FOLDER_ID}
+      - GOOGLE_DRIVE_KNOWLEDGE_FOLDER_ID=${GOOGLE_DRIVE_KNOWLEDGE_FOLDER_ID}
+    
+    ports:
+      - "8090:8090"
+    
+    volumes:
+      - ./services/rag:/app
+      - ./shared:/app/shared
+      - ./credentials:/app/credentials:ro  # Read-only для безопасности
+      - reports-storage:/app/processed_docs
+    
+    networks:
+      - partscout-network
+    
+    # Активируется только если feature flag включен
+    profiles:
+      - rag-enabled
+    
+    labels:
+      - "partscout.service=rag"
+      - "partscout.description=RAG service for embeddings and vector search"
+
+  # ==========================================================================
+  # CLOUDFLARE TUNNEL - Безопасный доступ к сервисам
+  # ==========================================================================
+  # У каждого сервиса может быть свой туннель
+  # Здесь пример для API, остальные по аналогии
+  # ==========================================================================
+  
+  tunnel-api:
+    image: cloudflare/cloudflared:latest
+    
+    container_name: partscout-tunnel-api
+    
+    restart: unless-stopped
+    
+    command: tunnel --no-autoupdate run
+    
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    
+    networks:
+      - partscout-network
+    
+    depends_on:
+      - api
+    
+    labels:
+      - "partscout.service=tunnel"
+      - "partscout.target=api"
+      - "partscout.hostname=${TUNNEL_API_HOSTNAME}"
+
+  tunnel-browser:
+    image: cloudflare/cloudflared:latest
+    
+    container_name: partscout-tunnel-browser
+    
+    restart: unless-stopped
+    
+    command: tunnel --no-autoupdate run
+    
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN_BROWSER}
+    
+    networks:
+      - partscout-network
+    
+    depends_on:
+      - browser
+    
+    # Можно отключить для MVP если не нужен внешний доступ к browser service
+    profiles:
+      - external-browser-access
+    
+    labels:
+      - "partscout.service=tunnel"
+      - "partscout.target=browser"
+      - "partscout.hostname=${TUNNEL_BROWSER_HOSTNAME}"
+
+  # ==========================================================================
+  # ПРИМЕЧАНИЯ:
+  # ==========================================================================
+  # 
+  # 1. n8n НЕ ВКЛЮЧЁН - у вас уже есть готовый docker-compose для него
+  #    Можно запускать отдельно или объединить позже
+  # 
+  # 2. PostgreSQL НЕ ВКЛЮЧЁН - используем Supabase (внешний)
+  #    Если захотите локальную БД для dev:
+  #    ```yaml
+  #    postgres:
+  #      image: supabase/postgres:15.1.0.147
+  #      environment:
+  #        POSTGRES_PASSWORD: ${SUPABASE_DB_PASSWORD}
+  #        POSTGRES_DB: partscout_dev
+  #      volumes:
+  #        - postgres-data:/var/lib/postgresql/data
+  #    ```
+  # 
+  # 3. Redis НЕ ВКЛЮЧЁН - для MVP не критичен
+  #    Кэш делаем через Supabase или в памяти
+  #    Если понадобится:
+  #    ```yaml
+  #    redis:
+  #      image: redis:7-alpine
+  #      ports:
+  #        - "6379:6379"
+  #    ```
+  # 
+  # 4. Volumes для persistence минимальны
+  #    После интервью добавим что нужно
+  # 
+  # 5. Healthchecks базовые
+  #    Production требует более детальных проверок
+  # 
+  # 6. Security минимальная (для dev)
+  #    Production нужны: secrets management, network policies, etc.
+  # 
+  # ==========================================================================
+
+# ============================================================================
+# DEVELOPMENT HELPERS
+# ============================================================================
+
+# Быстрый старт для разработки (без RAG, без туннелей):
+# docker-compose up api browser
+
+# Полный стек для тестирования:
+# docker-compose --profile rag-enabled --profile external-browser-access up
+
+# Production деплой (с туннелями):
+# docker-compose up -d
+
+# ============================================================================
